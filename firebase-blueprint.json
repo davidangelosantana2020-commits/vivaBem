@@ -1,0 +1,48 @@
+{
+  "entities": {
+    "Newsletter": {
+      "title": "Newsletter Subscription",
+      "description": "Stores user emails for the weekly newsletter.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the user subscribed."
+        }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "Post": {
+      "title": "Blog Post",
+      "description": "Represents a dynamic blog article.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string" },
+        "author": { "type": "string" },
+        "img": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "category", "author", "img"]
+    }
+  },
+  "firestore": {
+    "newsletter": {
+      "schema": "Newsletter",
+      "description": "Collection of newsletter subscribers."
+    },
+    "posts": {
+      "schema": "Post",
+      "description": "Collection of dynamic blog posts."
+    }
+  }
+}

@@ -1,0 +1,72 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: newsletter
+// Document ID: auto-generated
+// Fields:
+//   - email: string (required, email format) - The subscriber's email
+//   - createdAt: timestamp (required) - When the user subscribed
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidNewsletter(data) {
+      return data.keys().hasOnly(['email', 'createdAt']) &&
+             data.email is string && isValidEmail(data.email) &&
+             data.email.size() < 256 &&
+             data.createdAt is timestamp;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.email == "davidangelosantana@gmail.com";
+    }
+
+    // ===============================================================
+    // Collection: newsletter
+    // ===============================================================
+    
+    match /newsletter/{id} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+
+    // ===============================================================
+    // Collection: posts
+    // ===============================================================
+    
+    match /posts/{postId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ===============================================================
+    // Collection: users (for roles)
+    // ===============================================================
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false; // Roles managed manually or via admin
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
