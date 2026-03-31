@@ -82,9 +82,6 @@ export default function Loja() {
           <p className="text-on-surface-variant font-light italic mb-8 italic">
             "Eficiência e resultado: o produto certo e a informação que funciona."
           </p>
-          <a href={WHATSAPP_URL} className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-xs hover:text-secondary transition-colors">
-            Falar com suporte técnico <ArrowRight size={14} />
-          </a>
         </section>
       </div>
     </div>
